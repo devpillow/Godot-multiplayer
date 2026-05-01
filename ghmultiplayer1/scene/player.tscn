@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3 uid="uid://ifcsk8umj6hm"]
+
+[ext_resource type="Script" uid="uid://cprhunq6ydw5y" path="res://scripts/player.gd" id="1_hjaqi"]
+[ext_resource type="Texture2D" uid="uid://dfp4uhgisg70x" path="res://assets/kikifox.jpeg" id="1_xo3ru"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_hjaqi"]
+radius = 8.93
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_hjaqi"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:modulate")
+properties/1/spawn = true
+properties/1/replication_mode = 2
+
+[node name="Player" type="CharacterBody2D"]
+script = ExtResource("1_hjaqi")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("1_xo3ru")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_hjaqi")
+disabled = true
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_hjaqi")
+
+[node name="Camera2D" type="Camera2D" parent="."]
