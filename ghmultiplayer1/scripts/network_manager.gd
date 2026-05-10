@@ -1,7 +1,9 @@
 extends Node
 
 const PORT = 8080
-const DEFAULT_IP = "127.0.0.1" # Localhost
+
+const URL = "ws://127.0.0.1:8080" #Websocket
+
 
 @onready var host_btn = $HostButton
 @onready var join_btn = $JoinButton
@@ -15,37 +17,39 @@ func _ready():
 	join_btn.pressed.connect(_on_join_pressed)
 
 func _on_host_pressed():
-	var peer = ENetMultiplayerPeer.new()
+
+	var peer = WebSocketMultiplayerPeer.new()
 	var error = peer.create_server(PORT)
 	if error != OK:
-		print("สร้าง Server ไม่สำเร็จ!")
+		print("สร้าง Server (WebSocket) ไม่สำเร็จ!")
 		return
 	
 	multiplayer.multiplayer_peer = peer
-	print("Host สำเร็จ! รอผู้เล่น...")
+	print("Host (WebSocket) สำเร็จ! รอผู้เล่น...")
 	
-	# เมื่อมีคนเชื่อมต่อเข้ามา ให้เรียกฟังก์ชัน spawn ตัวละคร
 	multiplayer.peer_connected.connect(_add_player)
-	
-	# Spawn ตัวละครให้ตัวเอง (Host) ด้วย (ID ของ Host คือ 1 เสมอ)
 	_add_player(1) 
 	
-	# ซ่อนปุ่ม
 	host_btn.hide()
 	join_btn.hide()
 
 func _on_join_pressed():
-	var peer = ENetMultiplayerPeer.new()
-	peer.create_client(DEFAULT_IP, PORT)
+# 2. เปลี่ยนมาใช้ WebSocketMultiplayerPeer ฝั่ง Client
+	var peer = WebSocketMultiplayerPeer.new()
+	# ใช้ URL แบบ ws:// แทน IP เปล่าๆ
+	var error = peer.create_client(URL) 
+	if error != OK:
+		print("เชื่อมต่อไม่สำเร็จ!")
+		return
 	multiplayer.multiplayer_peer = peer
-	print("กำลัง Join...")
-	
+	print("กำลัง Join ผ่าน WebSocket...")
 	# ซ่อนปุ่ม
 	host_btn.hide()
 	join_btn.hide()
 
 # ฟังก์ชันนี้จะถูกเรียกเฉพาะฝั่ง Host เท่านั้น
 func _add_player(id):
+	print("player joined : "+ str(id))
 	var player = player_scene.instantiate()
 	# สำคัญมาก: ต้องตั้งชื่อ Node ตัวละครให้เป็น ID ของผู้เล่น เพื่อให้ระบบรู้ว่าใครเป็นเจ้าของ
 	player.name = str(id) 
