@@ -11,7 +11,7 @@ URL websocket example
 ```swift
 const PORT = 8080
 const URL = "ws://127.0.0.1:8080" #Websocket
-const URL = "wss://rejoin-erasure-evaluate.ngrok-free.dev" #ngrok```
+const URL = "wss://abc-def-ghostbump.ngrok-free.dev" #ngrok```
 ```
 Host
 ```swift
@@ -26,7 +26,7 @@ Host
     
     multiplayer.peer_connected.connect(_add_player)
 #_add_player(1) #ตัวhostอาจจะเป็นหนึ่งในผู้เล่น```
-
+```
 Client
 ```swift
 var peer = WebSocketMultiplayerPeer.new()
@@ -37,7 +37,7 @@ var peer = WebSocketMultiplayerPeer.new()
         return
     multiplayer.multiplayer_peer = peer
     print("กำลัง Join ผ่าน WebSocket...")```
-
+```
 ___
 
 สามารถรู้ได้ว่า Player ตัวไหน คือตัวเราได้จากการเรียก
